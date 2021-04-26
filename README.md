@@ -1,4 +1,5 @@
 # Java Spring Boot Application 
+> *This back-end application provides custom endpoints and database storage for a React UI application title `Water-My-Plants`. * 
 
 #### Meet the Developement Team
 - George Hatzigeorgio
@@ -32,7 +33,7 @@
     - https://bw-tt-67-water-my-plants.herokuapp.com/users/user/4
 
 ## Features
-### MVC Design
+### MVC Design & Structure
 * [ ] Configurations
 * [ ] Controllers
 * [ ] Exceptions
@@ -41,7 +42,11 @@
 * [ ] Repositories
 * [ ] Services
 
-## Dependencies
+## Application Tools
+### Build System
+* [ ] Apache Maven
+
+### Dependencies
 * [ ] Spring OAUTH
 * [ ] Spring Boot
 * [ ] Sprint Security
