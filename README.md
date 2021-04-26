@@ -3,7 +3,7 @@
 #### Meet the Developement Team
   - George Hatzigeorgio
   - Jason Corchado
-  - Tarah Agbokhana, A.S.
+  - Tarah Agbokhana, A.S. || https://www.linkedin.com/in/tarah-agbokhana/
   
 ### Important Links
 * [ ] Heroku Deploy URL 
@@ -31,7 +31,7 @@
 * [ ] DELETE
     - https://bw-tt-67-water-my-plants.herokuapp.com/users/user/4
 
-## Features 
+## Features:
 ### MVC Design
 * [ ] Configurations
 * [ ] Controllers
