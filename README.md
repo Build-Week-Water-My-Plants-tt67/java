@@ -1,5 +1,5 @@
 # Java Spring Boot Application 
-> This back-end application provides custom endpoints and database storage for a React UI application title "Water-My-Plants", an unique solution to help you grow a beautiful garden.  
+> This back-end application provides custom endpoints and database storage for a React UI application title "Water-My-Plants", an unique solution to help grow beautiful gardens.  
 
 #### Meet the Developement Team
 - George Hatzigeorgio
