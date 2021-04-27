@@ -12,20 +12,14 @@ public interface PlantService {
 
     void delete(long id);
 
-    Plant update(long plantid ,Plant plant);
 
-    Plant save(long userid ,Plant plant);
+
+    Plant save(long plantid ,Plant plant);
 
     Plant findPlantById(long id);
 
 
+    Plant save(Plant newPlant);
 
-
-
-
-
-
-
-
-
+    Plant update(long id, Plant plant);
 }

@@ -18,21 +18,21 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<Plant> findAll() {
-        return null;
+        List<Plant> list = new ArrayList<>();
+        plantrepos.findAll()
+                .iterator()
+                .forEachRemaining(list::add);
+        return list;
 
     }
     @Transactional
     @Override
-    public void delete(long id) {
-
-
-    }
-    @Transactional
-    @Override
-    public Plant update(long plantid, Plant plant) {
-       return null;
+    public void delete(long id){
 
     }
+
+
+
     @Transactional
     @Override
     public Plant save(long userid, Plant plant) {
@@ -41,6 +41,16 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public Plant findPlantById(long id) {
+        return null;
+    }
+
+    @Override
+    public Plant save(Plant newPlant) {
+        return null;
+    }
+
+    @Override
+    public Plant update(long id, Plant plant) {
         return null;
     }
 }
