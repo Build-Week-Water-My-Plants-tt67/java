@@ -1,6 +1,6 @@
 package com.lambdaschool.java.models;
 
-import javax.validation.constraints.Email;
+import javax.validation.constraints.*;
 
 /**
  * A model used to create a new user. The minimum information needed to create a user.
@@ -17,6 +17,13 @@ public class UserMinimum
      * The user's password (String)
      */
     private String password;
+
+    /**
+     * The user's phoneNumber (String)
+     */
+    @Size(min = 10, max = 10, message = "phone number must be 10 digits")
+    @Digits(fraction = 0, integer = 10, message = "phone number only contain numbers between 0-9")
+    private String phoneNumber;
 
     /**
      * Getter for the username
@@ -59,4 +66,11 @@ public class UserMinimum
         this.password = password;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+    }
 }
