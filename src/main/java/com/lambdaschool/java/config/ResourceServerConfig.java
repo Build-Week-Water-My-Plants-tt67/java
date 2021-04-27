@@ -61,14 +61,10 @@ public class ResourceServerConfig
                              "/useremails/**",
                              "/books/**",
                              "/oauth/revoke-token",
-                             "/logout")
-                .authenticated()
-                .antMatchers("/roles/**")
-                .hasAnyRole("ADMIN", "DATA")
-                .anyRequest().denyAll()
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(new OAuth2AccessDeniedHandler());
+                             "/logout",
+                        "/plants/**")
+                .authenticated();
+
 
         // http.requiresChannel().anyRequest().requiresSecure(); required for https
 

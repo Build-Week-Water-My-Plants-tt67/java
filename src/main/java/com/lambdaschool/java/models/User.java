@@ -37,9 +37,7 @@ public class User extends Auditable
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user",allowSetters = true)
-    private List<Plant> plants = new ArrayList<>();
+
     /**
      * Primary email account of user. Could be used as the userid. Cannot be null and must be unique.
      */
@@ -221,13 +219,7 @@ public class User extends Auditable
         this.roles = roles;
     }
 
-    public List<Plant> getPlants() {
-        return plants;
-    }
 
-    public void setPlants(List<Plant> plants) {
-        this.plants = plants;
-    }
 
     /**
      * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.

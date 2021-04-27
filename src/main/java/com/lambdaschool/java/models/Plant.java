@@ -6,12 +6,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name= "plants")
-public class Plant {
+public class Plant extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long plantid;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String nickname;
 
     private String species;
@@ -26,10 +26,10 @@ public class Plant {
         this.species = species;
         H2ofrequency = h2ofrequency;
     }
-    @ManyToOne
-    @JoinColumn(name="userid", nullable = false)
-    @JsonIgnoreProperties(value ="plant",allowSetters = true)
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name="userid", nullable = false)
+//    @JsonIgnoreProperties(value ="plant",allowSetters = true)
+//    private User user;
 
     public long getPlantid() {
         return plantid;
@@ -63,11 +63,11 @@ public class Plant {
         H2ofrequency = h2ofrequency;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 }
