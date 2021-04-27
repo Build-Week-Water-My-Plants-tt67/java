@@ -55,16 +55,18 @@ public class ResourceServerConfig
                              "/swagger-ui.html",
                              "/v2/api-docs",
                              "/webjars/**",
-                             "/createnewuser")
+                             "/api/register")
                 .permitAll()
-                .antMatchers("/users/**",
-                             "/useremails/**",
-                             "/books/**",
-                             "/oauth/revoke-token",
-                             "/logout",
-                        "/plants/**")
+                .antMatchers("/api/users/**",
+                             "/api/plants/**",
+                             "/api/logout")
                 .authenticated();
-
+//                .antMatchers("/roles/**")
+//                .hasAnyRole("ADMIN", "DATA")
+//                .anyRequest().denyAll()
+//                .and()
+//                .exceptionHandling()
+//                .accessDeniedHandler(new OAuth2AccessDeniedHandler());
 
         // http.requiresChannel().anyRequest().requiresSecure(); required for https
 
@@ -207,7 +209,7 @@ public class ResourceServerConfig
                     .authenticationManager(authenticationManager);
             // here instead of our clients requesting authentication at the endpoint /oauth/token, they request it at the endpoint /login
             endpoints.pathMapping("/oauth/token",
-                                  "/login");
+                                  "/api/users/login");
         }
     }
 }

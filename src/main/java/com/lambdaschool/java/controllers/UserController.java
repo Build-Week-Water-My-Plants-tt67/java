@@ -19,7 +19,7 @@ import java.util.List;
  * The entry point for clients to access user data
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController
 {
     /**
@@ -35,7 +35,6 @@ public class UserController
      * @return JSON list of all users with a status of OK
      * @see UserService#findAll() UserService.findAll()
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/users",
             produces = "application/json")
     public ResponseEntity<?> listAllUsers()
@@ -53,7 +52,7 @@ public class UserController
      * @return JSON object of the user you seek
      * @see UserService#findUserById(long) UserService.findUserById(long)
      */
-    @GetMapping(value = "/user/{userId}",
+    @GetMapping(value = "/users/{userId}",
             produces = "application/json")
     public ResponseEntity<?> getUserById(
             @PathVariable
@@ -72,7 +71,7 @@ public class UserController
      * @return JSON object of the user you seek
      * @see UserService#findByName(String) UserService.findByName(String)
      */
-    @GetMapping(value = "/user/name/{userName}",
+    @GetMapping(value = "/users/name/{userName}",
             produces = "application/json")
     public ResponseEntity<?> getUserByName(
             @PathVariable
@@ -91,8 +90,7 @@ public class UserController
      * @return A JSON list of users you seek
      * @see UserService#findByNameContaining(String) UserService.findByNameContaining(String)
      */
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping(value = "/user/name/like/{userName}",
+    @GetMapping(value = "/users/name/like/{userName}",
             produces = "application/json")
     public ResponseEntity<?> getUserLikeName(
             @PathVariable
@@ -103,40 +101,6 @@ public class UserController
                                     HttpStatus.OK);
     }
 
-    /**
-     * Given a complete User Object, create a new User record and accompanying useremail records
-     * and user role records.
-     * <br> Example: <a href="http://localhost:2019/users/user">http://localhost:2019/users/user</a>
-     *
-     * @param newuser A complete new user to add including emails and roles.
-     *                roles must already exist.
-     * @return A location header with the URI to the newly created user and a status of CREATED
-     * @throws URISyntaxException Exception if something does not work in creating the location header
-     * @see UserService#save(User) UserService.save(User)
-     */
-    @PostMapping(value = "/user",
-            consumes = "application/json")
-    public ResponseEntity<?> addNewUser(
-            @Valid
-            @RequestBody
-                    User newuser) throws
-            URISyntaxException
-    {
-        newuser.setUserid(0);
-        newuser = userService.save(newuser);
-
-        // set the location header for the newly created resource
-        HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{userid}")
-                .buildAndExpand(newuser.getUserid())
-                .toUri();
-        responseHeaders.setLocation(newUserURI);
-
-        return new ResponseEntity<>(null,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
-    }
 
     /**
      * Given a complete User Object
@@ -151,7 +115,7 @@ public class UserController
      * @return status of OK
      * @see UserService#save(User) UserService.save(User)
      */
-    @PutMapping(value = "/user/{userid}",
+    @PutMapping(value = "/users/{userid}",
             consumes = "application/json")
     public ResponseEntity<?> updateFullUser(
             @Valid
@@ -177,7 +141,7 @@ public class UserController
      * @return A status of OK
      * @see UserService#update(User, long) UserService.update(User, long)
      */
-    @PatchMapping(value = "/user/{id}",
+    @PatchMapping(value = "/users/{id}",
             consumes = "application/json")
     public ResponseEntity<?> updateUser(
             @RequestBody
@@ -197,7 +161,7 @@ public class UserController
      * @param id the primary key of the user you wish to delete
      * @return Status of OK
      */
-    @DeleteMapping(value = "/user/{id}")
+    @DeleteMapping(value = "/users/{id}")
     public ResponseEntity<?> deleteUserById(
             @PathVariable
                     long id)

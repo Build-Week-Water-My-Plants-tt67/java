@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+import javax.validation.constraints.*;
 import java.util.*;
 
 /**
@@ -41,28 +41,9 @@ public class User extends Auditable
     /**
      * Primary email account of user. Could be used as the userid. Cannot be null and must be unique.
      */
-    @Column(unique = true)
-    @Email
-    private String primaryemail;
-
-    /**
-     * A list of emails for this user
-     */
-    @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
-    private List<Useremail> useremails = new ArrayList<>();
-
-    /**
-     * Part of the join relationship between user and role
-     * connects users to the user role combination
-     */
-    @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    @JsonIgnoreProperties(value = "user", allowSetters = true)
-    private Set<UserRoles> roles = new HashSet<>();
+    @Column(nullable = false,
+        unique = true)
+    private String phoneNumber;
 
     /**
      * Default constructor used primarily by the JPA.
@@ -78,16 +59,16 @@ public class User extends Auditable
      *
      * @param username     The username (String) of the user
      * @param password     The password (String) of the user
-     * @param primaryemail The primary email (String) of the user
+     * @param phoneNumber  The phone (String) of the user
      */
     public User(
             String username,
             String password,
-            String primaryemail)
+            String phoneNumber)
     {
         setUsername(username);
         setPassword(password);
-        this.primaryemail = primaryemail;
+        setPhoneNumber(phoneNumber);
     }
 
     /**
@@ -130,25 +111,6 @@ public class User extends Auditable
         this.username = username.toLowerCase();
     }
 
-    /**
-     * getter for primary email
-     *
-     * @return the primary email (String) for the user converted to lowercase
-     */
-    public String getPrimaryemail()
-    {
-        return primaryemail;
-    }
-
-    /**
-     * setter for primary email
-     *
-     * @param primaryemail the new primary email (String) for the user converted to lowercase
-     */
-    public void setPrimaryemail(String primaryemail)
-    {
-        this.primaryemail = primaryemail.toLowerCase();
-    }
 
     /**
      * Getter for the password
@@ -179,44 +141,12 @@ public class User extends Auditable
         this.password = passwordEncoder.encode(password);
     }
 
-    /**
-     * Getter for the list of useremails for this user
-     *
-     * @return the list of useremails (List(Useremail)) for this user
-     */
-    public List<Useremail> getUseremails()
-    {
-        return useremails;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    /**
-     * Setter for list of useremails for this user
-     *
-     * @param useremails the new list of useremails (List(Useremail)) for this user
-     */
-    public void setUseremails(List<Useremail> useremails)
-    {
-        this.useremails = useremails;
-    }
-
-    /**
-     * Getter for user role combinations
-     *
-     * @return A list of user role combinations associated with this user
-     */
-    public Set<UserRoles> getRoles()
-    {
-        return roles;
-    }
-
-    /**
-     * Setter for user role combinations
-     *
-     * @param roles Change the list of user role combinations associated with this user to this one
-     */
-    public void setRoles(Set<UserRoles> roles)
-    {
-        this.roles = roles;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
     }
 
 
@@ -233,14 +163,8 @@ public class User extends Auditable
     public List<SimpleGrantedAuthority> getAuthority()
     {
         List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
-
-        for (UserRoles r : this.roles)
-        {
-            String myRole = "ROLE_" + r.getRole()
-                    .getName()
-                    .toUpperCase();
-            rtnList.add(new SimpleGrantedAuthority(myRole));
-        }
+            String myUser = "User" + this.username;
+            rtnList.add(new SimpleGrantedAuthority(myUser));
 
         return rtnList;
     }
