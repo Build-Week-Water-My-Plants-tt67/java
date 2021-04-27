@@ -25,11 +25,6 @@ public class UserServiceImpl
     @Autowired
     private UserRepository userrepos;
 
-    /**
-     * Connects this service to the Role table
-     */
-    @Autowired
-    private RoleService roleService;
 
     public User findUserById(long id) throws
                                       ResourceNotFoundException
@@ -94,28 +89,7 @@ public class UserServiceImpl
         newUser.setUsername(user.getUsername()
                                     .toLowerCase());
         newUser.setPasswordNoEncrypt(user.getPassword());
-        newUser.setPrimaryemail(user.getPrimaryemail()
-                                        .toLowerCase());
-
-        newUser.getRoles()
-                .clear();
-        for (UserRoles ur : user.getRoles())
-        {
-            Role addRole = roleService.findRoleById(ur.getRole()
-                                                      .getRoleid());
-            newUser.getRoles()
-                    .add(new UserRoles(newUser, addRole));
-        }
-
-        newUser.getUseremails()
-                .clear();
-        for (Useremail ue : user.getUseremails())
-        {
-            newUser.getUseremails()
-                    .add(new Useremail(newUser,
-                                       ue.getUseremail()));
-        }
-
+        newUser.setPhoneNumber(user.getPhoneNumber());
         return userrepos.save(newUser);
     }
 
@@ -138,38 +112,9 @@ public class UserServiceImpl
             currentUser.setPasswordNoEncrypt(user.getPassword());
         }
 
-        if (user.getPrimaryemail() != null)
+        if (user.getPhoneNumber() != null)
         {
-            currentUser.setPrimaryemail(user.getPrimaryemail()
-                                                .toLowerCase());
-        }
-
-        if (user.getRoles()
-                .size() > 0)
-        {
-            currentUser.getRoles()
-                    .clear();
-            for (UserRoles ur : user.getRoles())
-            {
-                Role addRole = roleService.findRoleById(ur.getRole()
-                                                                .getRoleid());
-
-                currentUser.getRoles()
-                        .add(new UserRoles(currentUser, addRole));
-            }
-        }
-
-        if (user.getUseremails()
-                .size() > 0)
-        {
-            currentUser.getUseremails()
-                    .clear();
-            for (Useremail ue : user.getUseremails())
-            {
-                currentUser.getUseremails()
-                        .add(new Useremail(currentUser,
-                                           ue.getUseremail()));
-            }
+            currentUser.setPhoneNumber(user.getPhoneNumber());
         }
 
         return userrepos.save(currentUser);
