@@ -18,18 +18,24 @@ public class Plant extends Auditable {
 
     private String H2ofrequency;
 
+    @ManyToOne
+    @JoinColumn(name="userid", nullable = false)
+    @JsonIgnoreProperties(value ="plants",allowSetters = true)
+    private User user;
+
     public Plant() {
     }
 
-    public Plant(String nickname, String species, String h2ofrequency) {
+    public Plant(
+        String nickname,
+        String species,
+        String h2ofrequency,
+        User user) {
         this.nickname = nickname;
         this.species = species;
         H2ofrequency = h2ofrequency;
+        this.user = user;
     }
-//    @ManyToOne
-//    @JoinColumn(name="userid", nullable = false)
-//    @JsonIgnoreProperties(value ="plant",allowSetters = true)
-//    private User user;
 
     public long getPlantid() {
         return plantid;
@@ -63,11 +69,11 @@ public class Plant extends Auditable {
         H2ofrequency = h2ofrequency;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -3,7 +3,6 @@ package com.lambdaschool.java;
 import com.lambdaschool.java.models.*;
 
 import com.lambdaschool.java.services.PlantService;
-import com.lambdaschool.java.services.RoleService;
 
 import com.lambdaschool.java.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,43 +53,35 @@ public class SeedData
                                    Exception
     {
         userService.deleteAll();
-        roleService.deleteAll();
         plantService.deleteAll();
-        
-        Role r1 = new Role("admin");
-        Role r2 = new Role("user");
-        Role r3 = new Role("data");
 
-       Plant p1 = new Plant("plant","asper","Every 3 days");
-       Plant p2 = new Plant("jibjab","affinis","once a week");
-       Plant p3 = new Plant("test","clinata","twice a week");
-
-        r1 = roleService.save(r1);
-        r2 = roleService.save(r2);
-        r3 = roleService.save(r3);
-
-        p1 = plantService.save(p1);
-        p2 = plantService.save(p2);
-        p3 = plantService.save(p3);
 
         User u1 = new User("guest",
                            "password",
                            "5555555555");
+        u1.getPlants()
+          .add(new Plant("plant","asper","Every 3 days", u1));
         userService.save(u1);
 
         User u2 = new User("tarah",
             "password",
             "4444444444");
+        u2.getPlants()
+          .add(new Plant("jibjab","affinis","once a week", u2));
         userService.save(u2);
 
         User u3 = new User("george",
             "password!",
             "2222222222");
+        u3.getPlants()
+          .add(new Plant("test","clinata","twice a week", u3));
         userService.save(u3);
 
         User u4 = new User("jason",
             "password",
             "8888888888");
+        u4.getPlants()
+            .add(new Plant("testPlant","testSpecies","twice a week", u4));
         userService.save(u4);
     }
 }

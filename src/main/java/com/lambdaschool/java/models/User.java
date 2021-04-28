@@ -45,11 +45,18 @@ public class User extends Auditable
         unique = true)
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
+    @JsonIgnoreProperties(value = "user",
+        allowSetters = true)
+    private List<Plant> plants = new ArrayList<>();
+
+
     /**
      * Default constructor used primarily by the JPA.
      */
-    public User()
-    {
+    public User() {
     }
 
     /**
@@ -149,7 +156,13 @@ public class User extends Auditable
         this.phoneNumber = phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
     }
 
+    public List<Plant> getPlants() {
+        return plants;
+    }
 
+    public void setPlants(List<Plant> plants) {
+        this.plants = plants;
+    }
 
     /**
      * Internally, user security requires a list of authorities, roles, that the user has. This method is a simple way to provide those.

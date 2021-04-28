@@ -25,6 +25,8 @@ public class UserServiceImpl
     @Autowired
     private UserRepository userrepos;
 
+    @Autowired
+    private PlantService plantService;
 
     public User findUserById(long id) throws
                                       ResourceNotFoundException
@@ -90,6 +92,15 @@ public class UserServiceImpl
                                     .toLowerCase());
         newUser.setPasswordNoEncrypt(user.getPassword());
         newUser.setPhoneNumber(user.getPhoneNumber());
+
+        newUser.getPlants().clear();
+        for (Plant up: user.getPlants()){
+            newUser.getPlants()
+                   .add( new Plant(up.getNickname(),
+                                   up.getSpecies(),
+                                   up.getH2ofrequency(),
+                                   newUser));
+        }
         return userrepos.save(newUser);
     }
 
@@ -115,6 +126,18 @@ public class UserServiceImpl
         if (user.getPhoneNumber() != null)
         {
             currentUser.setPhoneNumber(user.getPhoneNumber());
+        }
+
+        if (user.getPlants().size() > 0) {
+            currentUser.getPlants().clear();
+
+            for (Plant p : user.getPlants()){
+                currentUser.getPlants()
+                           .add(new Plant(p.getNickname(),
+                                          p.getSpecies(),
+                                          p.getH2ofrequency(),
+                                          currentUser));
+            }
         }
 
         return userrepos.save(currentUser);

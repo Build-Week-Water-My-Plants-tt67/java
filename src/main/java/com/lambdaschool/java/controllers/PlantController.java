@@ -16,13 +16,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class PlantController {
     @Autowired
     private PlantService plantService;
 
-
-
-    @GetMapping(value = "/plants/plant/{plantId}",produces = "application/json")
+    @GetMapping(value = "/plants/{plantId}",produces = "application/json")
     public ResponseEntity<?> getPlantById(@PathVariable Long plantId)
     {
         Plant p = plantService.findPlantById(plantId);
@@ -44,7 +43,7 @@ public class PlantController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newPlantURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("{plantid}")
+                .path("/{plantid}")
                 .buildAndExpand(newPlant.getPlantid())
                 .toUri();
         responseHeaders.setLocation(newPlantURI);
@@ -52,16 +51,28 @@ public class PlantController {
         return new ResponseEntity<>(null,responseHeaders,HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/plant/{plantid}",consumes = "application/json")
-    public ResponseEntity<?> updatePlant(@Valid@RequestBody Plant updatePlant , @PathVariable long plantid)
+    @PutMapping(value = "/plants/{plantid}",consumes = "application/json")
+    public ResponseEntity<?> updateFullPlant(@Valid@RequestBody Plant updatePlant , @PathVariable long plantid)
     {
         updatePlant.setPlantid(plantid);
         plantService.save(updatePlant);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(updatePlant, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/plants/plant/{plantid}")
+    @PatchMapping(value = "/plants/{id}",
+        consumes = "application/json")
+    public ResponseEntity<?> updatePlant(
+        @RequestBody
+            Plant updatePlant,
+        @PathVariable
+            long id)
+    {
+        plantService.update(id, updatePlant);
+        return new ResponseEntity<>(updatePlant, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/plants/{plantid}")
     public ResponseEntity<?> deletePlantById(@PathVariable long plantid)
     {
         plantService.delete(plantid);

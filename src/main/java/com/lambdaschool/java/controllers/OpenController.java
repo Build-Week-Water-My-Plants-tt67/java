@@ -61,14 +61,15 @@ public class OpenController
         // set the location header for the newly created resource
         // The location comes from a different controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() +
+                                                                       "/api/users/{userId}")
                 .buildAndExpand(newuser.getUserid())
                 .toUri();
         responseHeaders.setLocation(newUserURI);
 
         // return the access token
         RestTemplate restTemplate = new RestTemplate();
-        String requestURI = "http://localhost" + ":" + httpServletRequest.getLocalPort() + "/api/users/login";
+        String requestURI = "http://localhost" + ":" + httpServletRequest.getLocalPort() + "/api/login";
 
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
@@ -88,8 +89,6 @@ public class OpenController
                 newminuser.getUsername());
         map.add("password",
                 newminuser.getPassword());
-        map.add("phoneNumber",
-                newminuser.getPhoneNumber());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
                                                                              headers);
