@@ -21,7 +21,6 @@ public class UserMinimum
     /**
      * The user's phoneNumber (String)
      */
-    @Size(min = 10, max = 10, message = "phone number must be 10 digits")
     @Digits(fraction = 0, integer = 10, message = "phone number only contain numbers between 0-9")
     private String phoneNumber;
 
@@ -71,6 +70,6 @@ public class UserMinimum
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber.replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
+        this.phoneNumber = phoneNumber;
     }
 }
