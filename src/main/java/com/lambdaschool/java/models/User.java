@@ -41,8 +41,7 @@ public class User extends Auditable
     /**
      * Primary email account of user. Could be used as the userid. Cannot be null and must be unique.
      */
-    @Column(nullable = false,
-        unique = true)
+    @Column(nullable = false)
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user",
@@ -75,7 +74,8 @@ public class User extends Auditable
     {
         setUsername(username);
         setPassword(password);
-        setPhoneNumber(phoneNumber);
+        setPhoneNumber(phoneNumber
+                           .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
     }
 
     /**
