@@ -57,7 +57,7 @@ public class ResourceServerConfig
                              "/webjars/**",
                              "/api/register")
                 .permitAll()
-                .antMatchers("/api/users/",
+                .antMatchers("/api/users/**",
                              "/api/plants/**",
                              "/api/logout")
                 .authenticated();
