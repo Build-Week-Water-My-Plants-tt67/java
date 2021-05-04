@@ -1,7 +1,6 @@
 package com.lambdaschool.java.controllers;
 
 import com.lambdaschool.java.models.*;
-import com.lambdaschool.java.services.RoleService;
 import com.lambdaschool.java.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -32,12 +31,6 @@ public class OpenController
     private UserService userService;
 
     /**
-     * A method in this controller adds a new user to the application with the role User so needs access to Role Services to do this.
-     */
-    @Autowired
-    private RoleService roleService;
-
-    /**
      * This endpoint always anyone to create an account with the default role of USER. That role is hardcoded in this method.
      *
      * @param httpServletRequest the request that comes in for creating the new user
@@ -45,7 +38,7 @@ public class OpenController
      * @return The token access and other relevent data to token access. Status of CREATED. The location header to look up the new user.
      * @throws URISyntaxException we create some URIs during this method. If anything goes wrong with that creation, an exception is thrown.
      */
-    @PostMapping(value = "/createnewuser",
+    @PostMapping(value = "api/register",
             consumes = {"application/json"},
             produces = {"application/json"})
     public ResponseEntity<?> addSelf(
@@ -61,26 +54,22 @@ public class OpenController
 
         newuser.setUsername(newminuser.getUsername());
         newuser.setPassword(newminuser.getPassword());
-
-        // add the default role of user
-        Set<UserRoles> newRoles = new HashSet<>();
-        newRoles.add(new UserRoles(newuser,
-                                   roleService.findByName("user")));
-        newuser.setRoles(newRoles);
+        newuser.setPhoneNumber(newminuser.getPhoneNumber());
 
         newuser = userService.save(newuser);
 
         // set the location header for the newly created resource
         // The location comes from a different controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() +
+                                                                       "/api/users/{userId}")
                 .buildAndExpand(newuser.getUserid())
                 .toUri();
         responseHeaders.setLocation(newUserURI);
 
         // return the access token
         RestTemplate restTemplate = new RestTemplate();
-        String requestURI = "http://localhost" + ":" + httpServletRequest.getLocalPort() + "/login";
+        String requestURI = "http://localhost" + ":" + httpServletRequest.getLocalPort() + "/api/login";
 
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);

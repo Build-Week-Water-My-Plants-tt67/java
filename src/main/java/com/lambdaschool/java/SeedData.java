@@ -1,20 +1,21 @@
 package com.lambdaschool.java;
 
 import com.lambdaschool.java.models.*;
-import com.lambdaschool.java.services.RoleService;
+
+import com.lambdaschool.java.services.PlantService;
+
 import com.lambdaschool.java.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Locale;
 
 /**
  * SeedData puts both known and random data into the database. It implements CommandLineRunner.
  * <p>
- * CoomandLineRunner: Spring Boot automatically runs the run method once and only once
+ * CommandLineRunner: Spring Boot automatically runs the run method once and only once
  * after the application context has been loaded.
  */
 @Transactional
@@ -28,16 +29,13 @@ public class SeedData
     implements CommandLineRunner
 {
     /**
-     * Connects the Role Service to this process
-     */
-    @Autowired
-    RoleService roleService;
-
-    /**
      * Connects the user service to this process
      */
     @Autowired
     UserService userService;
+
+    @Autowired
+    PlantService plantService;
 
     /**
      * Generates test, seed data for our application
@@ -48,82 +46,42 @@ public class SeedData
      *
      * @param args The parameter is required by the parent interface but is not used in this process.
      */
+
     @Transactional
     @Override
     public void run(String[] args) throws
                                    Exception
     {
         userService.deleteAll();
-        roleService.deleteAll();
-        Role r1 = new Role("admin");
-        Role r2 = new Role("user");
-        Role r3 = new Role("data");
+        plantService.deleteAll();
 
-        r1 = roleService.save(r1);
-        r2 = roleService.save(r2);
-        r3 = roleService.save(r3);
 
-        // admin, data, user
         User u1 = new User("guest",
                            "password",
-                           "guest@lambdaschool.local");
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r1));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                               r2));
-        u1.getRoles()
-            .add(new UserRoles(u1,
-                r3));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@email.local"));
-        u1.getUseremails()
-            .add(new Useremail(u1,
-                "admin@mymail.local"));
-
+                           "5555555555");
+        u1.getPlants()
+          .add(new Plant("plant","asper","Every 3 days", u1));
         userService.save(u1);
 
-        // data, user
         User u2 = new User("tarah",
             "password",
-            "tarah@lambdaschool.local");
-        u2.getRoles()
-            .add(new UserRoles(u2,
-                r2));
-        u2.getRoles()
-            .add(new UserRoles(u2,
-                r3));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "tarah@mymail.local"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "tagbokhana@mymail.local"));
-        u2.getUseremails()
-            .add(new Useremail(u2,
-                "bunny@email.local"));
+            "4444444444");
+        u2.getPlants()
+          .add(new Plant("jibjab","affinis","once a week", u2));
         userService.save(u2);
 
-        // user
         User u3 = new User("george",
             "password!",
-            "george@lambdaschool.local");
-        u3.getRoles()
-            .add(new UserRoles(u3,
-                r2));
-        u3.getUseremails()
-            .add(new Useremail(u3,
-                "george@email.local"));
+            "2222222222");
+        u3.getPlants()
+          .add(new Plant("test","clinata","twice a week", u3));
         userService.save(u3);
 
         User u4 = new User("jason",
             "password",
-            "jason@school.lambda");
-        u4.getRoles()
-            .add(new UserRoles(u4,
-                r2));
+            "8888888888");
+        u4.getPlants()
+            .add(new Plant("testPlant","testSpecies","twice a week", u4));
         userService.save(u4);
     }
 }

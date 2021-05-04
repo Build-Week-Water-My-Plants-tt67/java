@@ -25,11 +25,8 @@ public class UserServiceImpl
     @Autowired
     private UserRepository userrepos;
 
-    /**
-     * Connects this service to the Role table
-     */
     @Autowired
-    private RoleService roleService;
+    private PlantService plantService;
 
     public User findUserById(long id) throws
                                       ResourceNotFoundException
@@ -94,28 +91,16 @@ public class UserServiceImpl
         newUser.setUsername(user.getUsername()
                                     .toLowerCase());
         newUser.setPasswordNoEncrypt(user.getPassword());
-        newUser.setPrimaryemail(user.getPrimaryemail()
-                                        .toLowerCase());
+        newUser.setPhoneNumber(user.getPhoneNumber());
 
-        newUser.getRoles()
-                .clear();
-        for (UserRoles ur : user.getRoles())
-        {
-            Role addRole = roleService.findRoleById(ur.getRole()
-                                                      .getRoleid());
-            newUser.getRoles()
-                    .add(new UserRoles(newUser, addRole));
+        newUser.getPlants().clear();
+        for (Plant up: user.getPlants()){
+            newUser.getPlants()
+                   .add( new Plant(up.getNickname(),
+                                   up.getSpecies(),
+                                   up.getH2ofrequency(),
+                                   newUser));
         }
-
-        newUser.getUseremails()
-                .clear();
-        for (Useremail ue : user.getUseremails())
-        {
-            newUser.getUseremails()
-                    .add(new Useremail(newUser,
-                                       ue.getUseremail()));
-        }
-
         return userrepos.save(newUser);
     }
 
@@ -138,37 +123,20 @@ public class UserServiceImpl
             currentUser.setPasswordNoEncrypt(user.getPassword());
         }
 
-        if (user.getPrimaryemail() != null)
+        if (user.getPhoneNumber() != null)
         {
-            currentUser.setPrimaryemail(user.getPrimaryemail()
-                                                .toLowerCase());
+            currentUser.setPhoneNumber(user.getPhoneNumber());
         }
 
-        if (user.getRoles()
-                .size() > 0)
-        {
-            currentUser.getRoles()
-                    .clear();
-            for (UserRoles ur : user.getRoles())
-            {
-                Role addRole = roleService.findRoleById(ur.getRole()
-                                                                .getRoleid());
+        if (user.getPlants().size() > 0) {
+            currentUser.getPlants().clear();
 
-                currentUser.getRoles()
-                        .add(new UserRoles(currentUser, addRole));
-            }
-        }
-
-        if (user.getUseremails()
-                .size() > 0)
-        {
-            currentUser.getUseremails()
-                    .clear();
-            for (Useremail ue : user.getUseremails())
-            {
-                currentUser.getUseremails()
-                        .add(new Useremail(currentUser,
-                                           ue.getUseremail()));
+            for (Plant p : user.getPlants()){
+                currentUser.getPlants()
+                           .add(new Plant(p.getNickname(),
+                                          p.getSpecies(),
+                                          p.getH2ofrequency(),
+                                          currentUser));
             }
         }
 
